@@ -208,8 +208,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
     color: '#fff',
-    textAlign: 'center', // Centraliza o texto
-    width: '100%',       // Garante que o texto ocupe toda a largura do container
+    textAlign: 'center', 
+    width: '100%',       
   },
   image: {
     width: 350,
