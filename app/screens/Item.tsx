@@ -33,8 +33,10 @@ type ItemScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Item'>;
 interface MemoryItem {
   nome: string;
   ano?: firebase.firestore.Timestamp;
-  descricao: string;
+  fabricante?: string;
+  descricaoCurta: string;
   imagem?: string;
+  curiosidade?: string;
 }
 
 const ItemScreen = () => {
@@ -66,8 +68,10 @@ const ItemScreen = () => {
             setItemData({
               nome: data.nome || 'Nome não disponível',
               ano: data.ano || null,
-              descricao: data.descricao || data.descricao || 'Descrição não disponível',
-              imagem: data.imagem || data.imagem || '',
+              fabricante: data.fabricante || 'Fabricante não disponível',
+              descricaoCurta: data.descricaoCurta || 'Descrição não disponível',
+              imagem: data.imagem || '',
+              curiosidade: data.curiosidade || 'Curiosidade não disponível'
             });
           } else {
             console.error("Documento encontrado, mas sem dados.");
@@ -86,7 +90,7 @@ const ItemScreen = () => {
   }, [itemId, collection]);
 
   const formatYear = (timestamp: firebase.firestore.Timestamp | undefined) => {
-    if (!timestamp) return 'Ano desconhecido';
+    if (!timestamp) return 'Ano de fabricação desconhecido';
     return timestamp.toDate().getFullYear().toString();
   };
 
@@ -145,8 +149,19 @@ const ItemScreen = () => {
           ) : (
             <Text style={styles.noImageText}>Imagem não disponível</Text>
           )}
-          <Text style={styles.dateText}>Ano: {formatYear(itemData.ano)}</Text>
-          <Text style={styles.descriptionText}>{itemData.descricao}</Text>
+          <Text style={styles.dateText}>
+            <Text style={{ fontWeight: 'bold' }}>Ano de fabricação: </Text>
+            {formatYear(itemData.ano)}
+          </Text>
+          <Text style={styles.infoText}>
+            <Text style={{ fontWeight: 'bold' }}>Fabricante: </Text>
+            {itemData.fabricante}
+          </Text>
+          <Text style={styles.infoText}>{itemData.descricaoCurta}</Text>
+          <Text style={styles.infoText}>
+            <Text style={{ fontWeight: 'bold' }}>Curiosidade: </Text>
+            {itemData.curiosidade}
+          </Text>
 
           <TouchableOpacity
             style={styles.learnMoreButton}
@@ -155,7 +170,6 @@ const ItemScreen = () => {
             <Text style={styles.learnMoreButtonText}>Saiba Mais</Text>
           </TouchableOpacity>
         </ScrollView>
-
 
       </SafeAreaView>
     </LinearGradient>
@@ -194,6 +208,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
     color: '#fff',
+    textAlign: 'center', // Centraliza o texto
+    width: '100%',       // Garante que o texto ocupe toda a largura do container
   },
   image: {
     width: 350,
@@ -211,10 +227,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     color: '#fff',
   },
-  descriptionText: {
+  infoText: {
     fontSize: 16,
     textAlign: 'justify',
     color: '#fff',
+    marginBottom: 20,
   },
   loadingContainer: {
     flex: 1,
@@ -235,14 +252,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 20,
     alignItems: 'center',
-   
   },
   learnMoreButtonText: {
     color: '#654ea3',
     fontSize: 16,
     fontWeight: 'bold',
   },
-
 });
 
 export default ItemScreen;

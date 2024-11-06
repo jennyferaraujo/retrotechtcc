@@ -54,10 +54,10 @@ const LearnMore = () => {
           const data = doc.data();
           console.log("Dados do Firestore:", data);
 
-          if (data && data.more) {
-            setItemMore(data.more);
+          if (data && data.descricaoLonga) {
+            setItemMore(data.descricaoLonga);
           } else {
-            console.error("Campo 'more' não encontrado.");
+            console.error("Campo não encontrado.");
             setItemMore(null);
           }
         } else {
