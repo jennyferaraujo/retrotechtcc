@@ -3,20 +3,21 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AboutScreen from './app/screens/About';
-import SearchScreen from './app/screens/Search';
+import CategoriesScreen from './app/screens/Categories';
 import TimelineScreen from './app/screens/Timeline';
-import QRCodeScreen from './app/screens/QRCode';
 import ItemScreen from './app/screens/Item';
 import LearnMoreScreen from './app/screens/LearnMore';
+import QRCodeScreen from './app/screens/QRCode';
 
 export type RootStackParamList = {
-  Search: undefined;
+  Categories: undefined;
   About: undefined;
   Timeline: undefined;
-  QRCode: undefined;
-  Item: { itemId: string };
-  LearnMore: undefined };
-
+  Quizz: undefined;
+  Item: { itemId: string; collection: string; documentName?: string; name?: string; details?: object; }; 
+  LearnMore: { itemId: string; collection: string } 
+  QRCode: undefined; };
+  
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -30,7 +31,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="About" screenOptions={screenOptions}>
         <Stack.Screen name="About" component={AboutScreen} />
-        <Stack.Screen name="Search" component={SearchScreen} />
+        <Stack.Screen name="Categories" component={CategoriesScreen} />
         <Stack.Screen name="Timeline" component={TimelineScreen} />
         <Stack.Screen name="Item" component={ItemScreen} />
         <Stack.Screen name="LearnMore" component={LearnMoreScreen} />

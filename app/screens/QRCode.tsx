@@ -1,68 +1,197 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
-import { BarCodeScanner } from 'expo-barcode-scanner';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../App'; 
-import firebase from 'firebase/compat/app';
+import React, { useState, useEffect, useRef } from "react";
+import { StyleSheet, Button, View, Modal, Alert, Text, ActivityIndicator, TouchableOpacity } from "react-native";
+import { CameraView, useCameraPermissions } from "expo-camera";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { LinearGradient } from "expo-linear-gradient";
+import { Ionicons } from "@expo/vector-icons";
+import firebase from "firebase/compat/app";
+import "firebase/compat/firestore";
+import { RootStackParamList } from "../../App";
 
-type QRCodeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'QRCode'>;
+const firebaseConfig = {
+  apiKey: "AIzaSyAxgyaaAMItQoaduphVvbgx5bTZtdxeqiw",
+  authDomain: "fir-retro-f6ff4.firebaseapp.com",
+  projectId: "fir-retro-f6ff4",
+  storageBucket: "fir-retro-f6ff4.appspot.com",
+  messagingSenderId: "952895017980",
+  appId: "1:952895017980:web:7e5c759401713790e6d879",
+};
 
-export default function QRCodeScreen() {
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+
+const firestore = firebase.firestore();
+const collections = [
+  "Calculadoras",
+  "Computadores pessoais e monitores",
+  "Dispositivos de armazenamento",
+  "Microcontroladores e Processadores",
+  "Placas controladoras e Relés",
+];
+
+type QRCodeScreenNavigationProp = StackNavigationProp<RootStackParamList, "Item">;
+
+export default function QRCodeScanner() {
+  const [modalIsVisible, setModalIsVisible] = useState(false);
+  const [permission, requestPermission] = useCameraPermissions();
+  const [isScanning, setIsScanning] = useState(false);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [scanned, setScanned] = useState(false);
+  const [alertShown, setAlertShown] = useState(false); // Estado para controlar o alerta
+
+  const qrCodeLock = useRef(false);
   const navigation = useNavigation<QRCodeScreenNavigationProp>();
 
   useEffect(() => {
-    (async () => {
-      const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
-    })();
+    const requestPermissions = async () => {
+      const { status } = await requestPermission();
+      setHasPermission(status === "granted");
+    };
+    requestPermissions();
   }, []);
 
-  const handleQRCodeScan = async ({ data }: { data: string }) => {
-    setScanned(true);
-    const itemId = data;  
+  const handleOpenCamera = async () => {
+    if (hasPermission === null) {
+      return Alert.alert("Câmera", "Solicitando permissão da câmera...");
+    }
+
+    if (hasPermission === false) {
+      return Alert.alert("Câmera", "Permissão da câmera negada.");
+    }
+
+    setModalIsVisible(true);
+    qrCodeLock.current = false;
+    setAlertShown(false); // Reseta o alerta para um novo escaneamento
+  };
+
+  const handleQRCodeRead = async (data: string) => {
+    if (qrCodeLock.current) return; // Impede múltiplos processamentos
+
+    setIsScanning(true);
+    qrCodeLock.current = true;
+    setModalIsVisible(false);
 
     try {
-      const itemRef = firebase.firestore().collection('items').doc(itemId);
-      const doc = await itemRef.get();
+      let itemFound = null;
 
-      if (doc.exists) {
-        
-        navigation.navigate('Item', { itemId });  
+      for (const collection of collections) {
+        const doc = await firestore.collection(collection).doc(data).get();
+        if (doc.exists) {
+          itemFound = { collection, data: doc.data(), id: doc.id };
+          break;
+        }
+      }
+
+      if (itemFound) {
+        const { collection, data: itemData, id: itemId } = itemFound;
+        navigation.navigate("Item", {
+          itemId,
+          collection,
+          name: itemData?.nome || "Item sem nome",
+          details: itemData,
+        });
       } else {
-        alert('Item não encontrado');
+        if (!alertShown) {
+          setAlertShown(true); // Marca que o alerta foi exibido
+          Alert.alert("Erro de QR Code", "QR Code incompatível ou não reconhecido.");
+        }
       }
     } catch (error) {
-      console.error('Erro ao buscar item no Firebase:', error);
-      alert('Erro ao buscar item.');
+      if (!alertShown) {
+        setAlertShown(true); // Marca que o alerta foi exibido
+        Alert.alert("Erro de QR Code", "Ocorreu um erro ao buscar os dados. Por favor, tente novamente.");
+      }
+    } finally {
+      qrCodeLock.current = false;
+      setIsScanning(false);
     }
   };
 
-  if (hasPermission === null) {
-    return <Text>Solicitando permissão da câmera...</Text>;
-  }
-
-  if (hasPermission === false) {
-    return <Text>Sem permissão para acessar a câmera</Text>;
-  }
-
   return (
-    <View style={styles.container}>
-      <BarCodeScanner
-        onBarCodeScanned={scanned ? undefined : handleQRCodeScan}
-        style={StyleSheet.absoluteFillObject}
-      />
-      {scanned && <Button title="Escanear novamente" onPress={() => setScanned(false)} />}
-    </View>
+    <LinearGradient colors={['#654ea3', '#eaafc8']} style={styles.linearGradient}>
+      <View style={styles.contentContainer}>
+        <Text style={styles.headerText}>Leitor de QR Code</Text>
+        <Text style={styles.bodyText}>
+          Escaneie um QR Code para acessar as informações do acervo de peças.
+        </Text>
+        <TouchableOpacity style={styles.scanButton} onPress={handleOpenCamera}>
+          <Ionicons name="camera" size={24} color="white" />
+          <Text style={styles.scanButtonText}>Ler QR Code</Text>
+        </TouchableOpacity>
+      </View>
+
+      <Modal visible={modalIsVisible} animationType="slide">
+        <CameraView
+          style={{ flex: 1 }}
+          facing="back"
+          onBarcodeScanned={({ data }) => {
+            if (data) {
+              handleQRCodeRead(data);
+            }
+          }}
+        />
+        {isScanning && (
+          <View style={styles.loading}>
+            <ActivityIndicator size="large" color="#0000ff" />
+            <Text>Processando QR Code...</Text>
+          </View>
+        )}
+        <View style={styles.footer}>
+          <Button title="Cancelar" onPress={() => setModalIsVisible(false)} />
+        </View>
+      </Modal>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  linearGradient: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  contentContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  headerText: {
+    color: "white",
+    fontSize: 24,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 10,
+  },
+  bodyText: {
+    color: "white",
+    fontSize: 16,
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  scanButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#9773b1",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+  },
+  scanButtonText: {
+    color: "white",
+    fontSize: 18,
+    marginLeft: 10,
+  },
+  footer: {
+    position: "absolute",
+    bottom: 10,
+    width: "100%",
+    alignItems: "center",
+  },
+  loading: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: [{ translateX: -50 }, { translateY: -50 }],
+    alignItems: "center",
   },
 });

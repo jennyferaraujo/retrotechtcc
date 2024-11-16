@@ -23,7 +23,7 @@ if (!firebase.apps.length) {
 const firestore = firebase.firestore();
 
 type RootStackParamList = {
-  Search: undefined;
+  Categories: undefined;
   Item: { itemId: string; collection: string };
 };
 
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
     marginTop: 29,
   },
   titleText: {
-    fontSize: 16,
+    fontSize: 18,
     color: '#ffffff',
     fontWeight: 'bold',
   },
@@ -260,14 +260,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     width: '110%',
     marginTop: 5,
-    transform: [{ translateX: 20 }],
+    transform: [{ translateX: 30 }],
   },
   horizontalLineRight: {
     height: 2,
     backgroundColor: '#ffffff',
     width: '110%',
     marginTop: 5,
-    transform: [{ translateX: -20 }],
+    transform: [{ translateX: -30 }],
   },
 });
 

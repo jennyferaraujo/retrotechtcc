@@ -12,11 +12,14 @@ const Footer = () => {
       <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('About')}>
         <Icon name="home" size={24} color="#000" />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('Search')}>
+      <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('Categories')}>
         <Icon name="list" size={24} color="#000" />
       </TouchableOpacity>
       <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('Timeline')}>
         <Icon name="calendar" size={24} color="#000" />
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('Quizz')}>
+        <Icon name="trophy" size={24} color="#000" />
       </TouchableOpacity>
       <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('QRCode')}>
         <Icon name="qrcode" size={24} color="#000" />

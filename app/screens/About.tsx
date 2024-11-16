@@ -1,18 +1,11 @@
 import React from 'react';
-import { Text, StyleSheet, ScrollView, TouchableOpacity, View, Alert } from 'react-native';
+import { Text, StyleSheet, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Footer from './Footer';
-import { Ionicons } from '@expo/vector-icons'; // Biblioteca de ícones
 
 const AboutScreen = () => {
-
-  const handleAccessibilityPress = () => {
-    Alert.alert("Acessibilidade", "função de acessibilidade");
-  };
-
   return (
     <LinearGradient colors={['#654ea3', '#eaafc8']} style={styles.linearGradient}>
-      
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <Text style={styles.headerText}>
           Bem-vindo ao RetroTech
@@ -36,7 +29,7 @@ const AboutScreen = () => {
           Equipe de desenvolvimento
         </Text>
         <Text style={styles.bodyText}>
-          Guilherme Souza dos Santos e Jennyfer Araujo - Sistemas da Informação
+          Jennyfer Araujo e Guilherme Souza dos Santos - Sistemas da Informação
         </Text>
         <Text style={styles.bodyText}>
           Orientador: Dalton Solano dos Reis
@@ -45,11 +38,6 @@ const AboutScreen = () => {
           Supervisor: Miguel A. Wistainater
         </Text>
       </ScrollView>
-
-      <TouchableOpacity style={styles.accessibilityButton} onPress={handleAccessibilityPress} accessible={true} accessibilityLabel="Botão de Acessibilidade">
-        <Ionicons name="accessibility" size={32} color="white" />
-      </TouchableOpacity>
-
       <Footer />
     </LinearGradient>
   );
@@ -62,7 +50,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingVertical: 20,
-    paddingBottom: 60, 
+    paddingBottom: 60,
   },
   headerText: {
     color: 'white',
@@ -83,16 +71,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'justify',
     marginBottom: 10,
-  },
-  accessibilityButton: {
-    position: 'absolute',
-    bottom: 100,  
-    right: 20,
-    backgroundColor: '#9773b1',
-    borderRadius: 50,
-    padding: 15, 
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });
 
