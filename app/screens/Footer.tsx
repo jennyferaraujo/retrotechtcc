@@ -18,7 +18,7 @@ const Footer = () => {
       <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('Timeline')}>
         <Icon name="calendar" size={24} color="#000" />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('Quizz')}>
+      <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('Games')}>
         <Icon name="trophy" size={24} color="#000" />
       </TouchableOpacity>
       <TouchableOpacity style={styles.footerButton} onPress={() => navigation.navigate('QRCode')}>

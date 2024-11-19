@@ -7,6 +7,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
+import Footer from './Footer';
 import { RootStackParamList } from "../../App";
 
 const firebaseConfig = {
@@ -62,19 +63,19 @@ export default function QRCodeScanner() {
 
     setModalIsVisible(true);
     qrCodeLock.current = false;
-    setAlertShown(false); // Reseta o alerta para um novo escaneamento
+    setAlertShown(false); 
   };
 
   const handleQRCodeRead = async (data: string) => {
-    if (qrCodeLock.current) return; // Impede múltiplos processamentos
-
+    if (qrCodeLock.current) return; 
+    qrCodeLock.current = true; 
+  
     setIsScanning(true);
-    qrCodeLock.current = true;
     setModalIsVisible(false);
-
+  
     try {
       let itemFound = null;
-
+  
       for (const collection of collections) {
         const doc = await firestore.collection(collection).doc(data).get();
         if (doc.exists) {
@@ -82,7 +83,7 @@ export default function QRCodeScanner() {
           break;
         }
       }
-
+  
       if (itemFound) {
         const { collection, data: itemData, id: itemId } = itemFound;
         navigation.navigate("Item", {
@@ -93,21 +94,36 @@ export default function QRCodeScanner() {
         });
       } else {
         if (!alertShown) {
-          setAlertShown(true); // Marca que o alerta foi exibido
-          Alert.alert("Erro de QR Code", "QR Code incompatível ou não reconhecido.");
+          setAlertShown(true);
+          Alert.alert("Erro de QR Code", "QR Code incompatível ou não reconhecido.", [
+            {
+              text: "OK",
+              onPress: () => {
+                setAlertShown(false);
+                qrCodeLock.current = false;
+              },
+            },
+          ]);
         }
       }
     } catch (error) {
       if (!alertShown) {
-        setAlertShown(true); // Marca que o alerta foi exibido
-        Alert.alert("Erro de QR Code", "Ocorreu um erro ao buscar os dados. Por favor, tente novamente.");
+        setAlertShown(true); 
+        Alert.alert("Erro de QR Code", "Ocorreu um erro ao buscar os dados. Por favor, tente novamente.", [
+          {
+            text: "OK",
+            onPress: () => {
+              setAlertShown(false); 
+              qrCodeLock.current = false; 
+            },
+          },
+        ]);
       }
     } finally {
-      qrCodeLock.current = false;
       setIsScanning(false);
     }
-  };
-
+  };  
+  
   return (
     <LinearGradient colors={['#654ea3', '#eaafc8']} style={styles.linearGradient}>
       <View style={styles.contentContainer}>
@@ -141,6 +157,7 @@ export default function QRCodeScanner() {
           <Button title="Cancelar" onPress={() => setModalIsVisible(false)} />
         </View>
       </Modal>
+      <Footer />
     </LinearGradient>
   );
 }

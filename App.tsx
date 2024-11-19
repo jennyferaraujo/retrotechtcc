@@ -7,6 +7,7 @@ import CategoriesScreen from './app/screens/Categories';
 import TimelineScreen from './app/screens/Timeline';
 import ItemScreen from './app/screens/Item';
 import LearnMoreScreen from './app/screens/LearnMore';
+import GamesScreen from './app/screens/Games';
 import QRCodeScreen from './app/screens/QRCode';
 
 export type RootStackParamList = {
@@ -16,8 +17,8 @@ export type RootStackParamList = {
   Quizz: undefined;
   Item: { itemId: string; collection: string; documentName?: string; name?: string; details?: object; }; 
   LearnMore: { itemId: string; collection: string } 
+  Games: undefined;
   QRCode: undefined; };
-  
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -35,6 +36,7 @@ export default function App() {
         <Stack.Screen name="Timeline" component={TimelineScreen} />
         <Stack.Screen name="Item" component={ItemScreen} />
         <Stack.Screen name="LearnMore" component={LearnMoreScreen} />
+        <Stack.Screen name="Games" component={GamesScreen} />
         <Stack.Screen name="QRCode" component={QRCodeScreen} />
       </Stack.Navigator>
     </NavigationContainer>
