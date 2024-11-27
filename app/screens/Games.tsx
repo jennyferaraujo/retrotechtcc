@@ -2,23 +2,24 @@ import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation, NavigationProp } from "@react-navigation/native"; 
 import Footer from "./Footer";
 
 type RootStackParamList = {
+  QRCodeGame: undefined;
+  QAGame: undefined;
   Games: undefined;
-  QRCodeScanner: undefined;
-  QA: undefined;
 };
 
 const GamesScreen = () => {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
   const handleNavigateToQrCode = () => {
-    console.log("Navegar para Caça às Peças");
-    
+    navigation.navigate("QRCodeGame"); 
   };
 
   const handleNavigateToQA = () => {
-    console.log("Navegar para Q&A");
-    
+    navigation.navigate("QAGame"); 
   };
 
   return (
@@ -31,8 +32,7 @@ const GamesScreen = () => {
           <View style={styles.cardContent}>
             <Text style={styles.cardTitle}>1. Caça às peças</Text>
             <Text style={styles.cardDescription}>
-              A partir do nome da peça em tela localize o QRCode da peça em questão no acervo
-              tecnológico.
+              Com base na imagem de uma peça específica, identifique o QR Code correspondente a ela no acervo tecnológico.
             </Text>
           </View>
         </TouchableOpacity>
@@ -55,49 +55,49 @@ const GamesScreen = () => {
 };
 
 const styles = StyleSheet.create({
-    linearGradient: {
-      flex: 1,
-      paddingHorizontal: 20,
-      paddingTop: 20, 
-    },
-    container: {
-      flex: 1,
-      justifyContent: "flex-start", 
-      alignItems: "center", 
-      marginTop: 20, 
-    },
-    headerText: {
-      fontSize: 24,
-      color: "#fff",
-      fontWeight: "bold",
-      textAlign: "center",
-      marginBottom: 20,
-    },
-    card: {
-      flexDirection: "row",
-      backgroundColor: "rgba(255, 255, 255, 0.2)",
-      padding: 20,
-      borderRadius: 15,
-      marginBottom: 20,
-      alignItems: "center",
-    },
-    cardContent: {
-      flex: 1,
-      marginLeft: 20,
-    },
-    cardTitle: {
-      fontSize: 18,
-      color: "#fff",
-      fontWeight: "bold",
-      marginBottom: 5,
-    },
-    cardDescription: {
-      fontSize: 14,
-      color: "#fff",
-    },
-    icon: {
-      marginRight: 10,
-    },
-  });  
+  linearGradient: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
+  container: {
+    flex: 1,
+    justifyContent: "flex-start",
+    alignItems: "center",
+    marginTop: 20,
+  },
+  headerText: {
+    fontSize: 24,
+    color: "#fff",
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  card: {
+    flexDirection: "row",
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    padding: 20,
+    borderRadius: 15,
+    marginBottom: 20,
+    alignItems: "center",
+  },
+  cardContent: {
+    flex: 1,
+    marginLeft: 20,
+  },
+  cardTitle: {
+    fontSize: 18,
+    color: "#fff",
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  cardDescription: {
+    fontSize: 14,
+    color: "#fff",
+  },
+  icon: {
+    marginRight: 10,
+  },
+});
 
 export default GamesScreen;

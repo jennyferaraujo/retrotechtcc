@@ -39,7 +39,7 @@ export default function QRCodeScanner() {
   const [permission, requestPermission] = useCameraPermissions();
   const [isScanning, setIsScanning] = useState(false);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [alertShown, setAlertShown] = useState(false); // Estado para controlar o alerta
+  const [alertShown, setAlertShown] = useState(false); 
 
   const qrCodeLock = useRef(false);
   const navigation = useNavigation<QRCodeScreenNavigationProp>();
