@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { Ionicons } from "@expo/vector-icons"; 
+import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
@@ -11,10 +11,17 @@ type QAGameSuccessNavigationProp = NativeStackNavigationProp<RootStackParamList,
 
 export default function QAGameSuccess({ route }: { route: QAGameSuccessRouteProp }) {
   const navigation = useNavigation<QAGameSuccessNavigationProp>();
+  const { onNextQuestion } = route.params;
+
+  const handleRetry = () => {
+    onNextQuestion(); // Randomiza a próxima questão
+    navigation.replace("QAGame"); // Volta para QAGame com uma nova questão
+  };
 
   return (
     <LinearGradient colors={["#654ea3", "#eaafc8"]} style={styles.linearGradient}>
       <View style={styles.container}>
+        {/* Botão de voltar no topo */}
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => navigation.navigate("Games")}
@@ -28,10 +35,7 @@ export default function QAGameSuccess({ route }: { route: QAGameSuccessRouteProp
         <Text style={styles.title}>Parabéns!</Text>
         <Text style={styles.message}>Você acertou a questão!</Text>
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate("QAGame")}
-        >
+        <TouchableOpacity style={styles.button} onPress={handleRetry}>
           <Text style={styles.buttonText}>Jogar Novamente</Text>
         </TouchableOpacity>
       </View>
@@ -51,8 +55,8 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: "absolute",
-    top: 40,
-    left: 20,
+    top: 20, // Ajustado para manter o botão próximo ao topo
+    left: 10,
   },
   backButtonContent: {
     flexDirection: "row",
@@ -60,7 +64,7 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     color: "#fff",
-    fontSize: 18,
+    fontSize: 16,
     marginLeft: 5,
   },
   title: {

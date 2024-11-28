@@ -11,7 +11,7 @@ type QRCodeGameFailureNavigationProp = NativeStackNavigationProp<RootStackParamL
 
 export default function QRCodeGameFailure({ route }: { route: QRCodeGameFailureRouteProp }) {
   const navigation = useNavigation<QRCodeGameFailureNavigationProp>();
-  const { peca } = route.params;
+  const { peca } = route.params; // Recebe os detalhes da peça correta
 
   return (
     <LinearGradient colors={["#654ea3", "#eaafc8"]} style={styles.linearGradient}>
@@ -29,6 +29,8 @@ export default function QRCodeGameFailure({ route }: { route: QRCodeGameFailureR
 
         <Text style={styles.title}>Que pena!</Text>
         <Text style={styles.message}>Você errou a peça.</Text>
+        <Text style={styles.message}>A peça correta era: {peca.nome}</Text>
+
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate("QRCodeGame")}

@@ -11,16 +11,12 @@ type QAGameFailureNavigationProp = NativeStackNavigationProp<RootStackParamList,
 
 export default function QAGameFailure({ route }: { route: QAGameFailureRouteProp }) {
   const navigation = useNavigation<QAGameFailureNavigationProp>();
-  const { peca, onNextQuestion } = route.params;
-
-  const handleRetry = () => {
-    onNextQuestion(); 
-  };
+  const { peca } = route.params;
 
   return (
     <LinearGradient colors={["#654ea3", "#eaafc8"]} style={styles.linearGradient}>
       <View style={styles.container}>
-        {/* Botão de voltar */}
+        {/* Botão de voltar no topo */}
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => navigation.navigate("Games")}
@@ -35,8 +31,11 @@ export default function QAGameFailure({ route }: { route: QAGameFailureRouteProp
         <Text style={styles.message}>Você errou a peça.</Text>
         <Text style={styles.message}>A peça correta era: {peca.nome}</Text>
 
-        <TouchableOpacity style={styles.retryButton} onPress={handleRetry}>
-          <Text style={styles.retryButtonText}>Jogar novamente</Text>
+        <TouchableOpacity
+          style={styles.retryButton}
+          onPress={() => navigation.replace("QAGame")}
+        >
+          <Text style={styles.retryButtonText}>Jogar Novamente</Text>
         </TouchableOpacity>
       </View>
     </LinearGradient>
@@ -49,15 +48,14 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 10,
     justifyContent: "center",
     alignItems: "center",
+    paddingHorizontal: 20,
   },
   backButton: {
     position: "absolute",
-    top: 40,
-    left: 20,
+    top: 20,
+    left: 10,
   },
   backButtonContent: {
     flexDirection: "row",
@@ -65,14 +63,14 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     color: "#fff",
-    fontSize: 18,
+    fontSize: 16,
     marginLeft: 5,
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     color: "#fff",
-    marginBottom: 20,
+    marginBottom: 10,
     textAlign: "center",
   },
   message: {

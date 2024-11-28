@@ -3,9 +3,9 @@ import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, SafeAreaVi
 import { LinearGradient } from "expo-linear-gradient";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
 import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
-import { Ionicons } from "@expo/vector-icons";
 import { RootStackParamList } from "../../App";
 
 const firebaseConfig = {
@@ -54,7 +54,7 @@ export default function QAGame() {
         (collection) => collection !== excludedCollection
       );
       const additionalItems: MemoryItem[] = [];
-  
+
       for (const collection of otherCollections) {
         const snapshot = await firestore.collection(collection).get();
         const items = snapshot.docs.map((doc) => ({
@@ -64,10 +64,10 @@ export default function QAGame() {
         }));
         additionalItems.push(...items);
       }
-  
+
       return additionalItems;
     };
-  
+
     const randomCollection =
       collections[Math.floor(Math.random() * collections.length)];
     const snapshot = await firestore.collection(randomCollection).get();
@@ -76,38 +76,38 @@ export default function QAGame() {
       id: doc.id,
       collection: randomCollection,
     }));
-  
+
     if (items.length > 0) {
       const correctItem = items[Math.floor(Math.random() * items.length)];
       setCorrectAnswer(correctItem);
-  
+
       let otherOptions = items.filter((item) => item.id !== correctItem.id);
-  
+
       if (otherOptions.length < 3) {
         const additionalOptions = await fetchAdditionalOptions(randomCollection);
         otherOptions = [...otherOptions, ...additionalOptions].filter(
           (item) => item.id !== correctItem.id
         );
       }
-  
+
       const incorrectOptions = otherOptions
         .sort(() => Math.random() - 0.5)
         .slice(0, 3);
-  
+
       const allOptions = [
         ...incorrectOptions.map((item) => item.nome),
         correctItem.nome,
       ].sort(() => Math.random() - 0.5);
-  
+
       setOptions(allOptions);
       setDescription(correctItem.descricaoCurta || "Descrição indisponível");
     } else {
       setOptions([]);
       setDescription("Não foi possível carregar a pergunta. Tente novamente.");
     }
-  
+
     setLoading(false);
-  };  
+  };
 
   useEffect(() => {
     fetchQuestion();
@@ -115,15 +115,9 @@ export default function QAGame() {
 
   const handleAnswer = (selectedAnswer: string) => {
     if (selectedAnswer === correctAnswer?.nome) {
-      navigation.navigate("QAGameSuccess", {
-        peca: correctAnswer,
-        onNextQuestion: fetchQuestion,
-      });
+      navigation.navigate("QAGameSuccess", { peca: correctAnswer, onNextQuestion: fetchQuestion });
     } else {
-      navigation.navigate("QAGameFailure", {
-        peca: correctAnswer,
-        onNextQuestion: fetchQuestion,
-      });
+      navigation.navigate("QAGameFailure", { peca: correctAnswer, onNextQuestion: fetchQuestion });
     }
   };
 
@@ -141,10 +135,7 @@ export default function QAGame() {
   return (
     <LinearGradient colors={["#654ea3", "#eaafc8"]} style={styles.linearGradient}>
       <SafeAreaView style={styles.container}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.navigate("Games")}
-        >
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate("Games")}>
           <View style={styles.backButtonContent}>
             <Ionicons name="arrow-back" size={24} color="#fff" />
             <Text style={styles.backButtonText}>Voltar</Text>
