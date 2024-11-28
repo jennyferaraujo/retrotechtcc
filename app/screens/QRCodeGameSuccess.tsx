@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useRef } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import LottieView from "lottie-react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -11,10 +12,25 @@ type QRCodeGameSuccessNavigationProp = NativeStackNavigationProp<RootStackParamL
 
 export default function QRCodeGameSuccess({ route }: { route: QRCodeGameSuccessRouteProp }) {
   const navigation = useNavigation<QRCodeGameSuccessNavigationProp>();
-  const { peca } = route.params;
+  const lottieRef = useRef<LottieView>(null); // Referência para o LottieView
+
+  const handleRetry = () => {
+    navigation.replace("QRCodeGame"); // Substitui a tela para reiniciar o jogo
+    lottieRef.current?.reset(); // Reseta a animação
+    lottieRef.current?.play(); // Reproduz a animação novamente
+  };
 
   return (
     <LinearGradient colors={["#654ea3", "#eaafc8"]} style={styles.linearGradient}>
+      {/* LottieView para animação */}
+      <LottieView
+        ref={lottieRef}
+        source={require("../../assets/confetti.json")} // Certifique-se de que o caminho está correto
+        autoPlay
+        loop={false}
+        style={styles.lottie}
+      />
+
       <View style={styles.container}>
         {/* Botão de voltar */}
         <TouchableOpacity
@@ -29,10 +45,9 @@ export default function QRCodeGameSuccess({ route }: { route: QRCodeGameSuccessR
 
         <Text style={styles.title}>Parabéns!</Text>
         <Text style={styles.message}>Você encontrou a peça certa!</Text>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate("QRCodeGame")}
-        >
+
+        {/* Botão para jogar novamente */}
+        <TouchableOpacity style={styles.button} onPress={handleRetry}>
           <Text style={styles.buttonText}>Jogar Novamente</Text>
         </TouchableOpacity>
       </View>
@@ -44,6 +59,12 @@ const styles = StyleSheet.create({
   linearGradient: {
     flex: 1,
   },
+  lottie: {
+    position: "absolute",
+    width: 400,
+    height: 400,
+    top: 0,
+  },
   container: {
     flex: 1,
     justifyContent: "center",
@@ -52,8 +73,8 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: "absolute",
-    top: 40,
-    left: 20,
+    top: 20,
+    left: 10,
   },
   backButtonContent: {
     flexDirection: "row",
@@ -61,7 +82,7 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     color: "#fff",
-    fontSize: 18,
+    fontSize: 16,
     marginLeft: 5,
   },
   title: {

@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useRef } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import LottieView from "lottie-react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -12,11 +13,25 @@ type QAGameFailureNavigationProp = NativeStackNavigationProp<RootStackParamList,
 export default function QAGameFailure({ route }: { route: QAGameFailureRouteProp }) {
   const navigation = useNavigation<QAGameFailureNavigationProp>();
   const { peca } = route.params;
+  const lottieRef = useRef<LottieView>(null);
+
+  const handleRetry = () => {
+    navigation.replace("QAGame"); 
+    lottieRef.current?.reset(); 
+    lottieRef.current?.play(); 
+  };
 
   return (
     <LinearGradient colors={["#654ea3", "#eaafc8"]} style={styles.linearGradient}>
+      <LottieView
+        ref={lottieRef}
+        source={require("../../assets/error.json")} 
+        autoPlay
+        loop={false} 
+        style={styles.lottie}
+      />
+
       <View style={styles.container}>
-        {/* Botão de voltar no topo */}
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => navigation.navigate("Games")}
@@ -31,10 +46,7 @@ export default function QAGameFailure({ route }: { route: QAGameFailureRouteProp
         <Text style={styles.message}>Você errou a peça.</Text>
         <Text style={styles.message}>A peça correta era: {peca.nome}</Text>
 
-        <TouchableOpacity
-          style={styles.retryButton}
-          onPress={() => navigation.replace("QAGame")}
-        >
+        <TouchableOpacity style={styles.retryButton} onPress={handleRetry}>
           <Text style={styles.retryButtonText}>Jogar Novamente</Text>
         </TouchableOpacity>
       </View>
@@ -45,6 +57,12 @@ export default function QAGameFailure({ route }: { route: QAGameFailureRouteProp
 const styles = StyleSheet.create({
   linearGradient: {
     flex: 1,
+  },
+  lottie: {
+    position: "absolute",
+    width: 400,
+    height: 400,
+    top: 0,
   },
   container: {
     flex: 1,
@@ -80,15 +98,15 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   retryButton: {
-    backgroundColor: "#dc3545",
-    paddingVertical: 15,
+    backgroundColor: "#9773b1", 
+    paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 10,
     marginTop: 20,
   },
   retryButtonText: {
-    color: "#fff",
-    fontSize: 18,
+    color: "white", 
+    fontSize: 16,
     fontWeight: "bold",
   },
 });

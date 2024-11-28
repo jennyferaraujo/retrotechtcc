@@ -1,16 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  StyleSheet,
-  View,
-  Modal,
-  ActivityIndicator,
-  TouchableOpacity,
-  Image,
-  Text,
-  SafeAreaView,
-  ScrollView,
-  Button,
-} from "react-native";
+import { StyleSheet, View, Modal, ActivityIndicator, TouchableOpacity, Image, Text, SafeAreaView, ScrollView, Button } from "react-native";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";

@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useRef } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import LottieView from "lottie-react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -13,15 +14,26 @@ export default function QAGameSuccess({ route }: { route: QAGameSuccessRouteProp
   const navigation = useNavigation<QAGameSuccessNavigationProp>();
   const { onNextQuestion } = route.params;
 
+  const lottieRef = useRef<LottieView>(null);
+
   const handleRetry = () => {
-    onNextQuestion(); // Randomiza a próxima questão
-    navigation.replace("QAGame"); // Volta para QAGame com uma nova questão
+    onNextQuestion(); 
+    navigation.replace("QAGame"); 
+    lottieRef.current?.reset(); 
+    lottieRef.current?.play(); 
   };
 
   return (
     <LinearGradient colors={["#654ea3", "#eaafc8"]} style={styles.linearGradient}>
+      <LottieView
+        ref={lottieRef}
+        source={require("../../assets/confetti.json")} 
+        autoPlay
+        loop={false} 
+        style={styles.lottie}
+      />
+
       <View style={styles.container}>
-        {/* Botão de voltar no topo */}
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => navigation.navigate("Games")}
@@ -53,9 +65,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 20,
   },
+  lottie: {
+    position: "absolute",
+    width: 400,
+    height: 400,
+    top: 0,
+  },
   backButton: {
     position: "absolute",
-    top: 20, // Ajustado para manter o botão próximo ao topo
+    top: 20,
     left: 10,
   },
   backButtonContent: {
