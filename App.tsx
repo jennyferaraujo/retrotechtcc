@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createNativeStackNavigator, NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import AboutScreen from './app/screens/About';
 import CategoriesScreen from './app/screens/Categories';
 import TimelineScreen from './app/screens/Timeline';
@@ -9,10 +9,10 @@ import ItemScreen from './app/screens/Item';
 import LearnMoreScreen from './app/screens/LearnMore';
 import GamesScreen from './app/screens/Games';
 import QRCodeScreen from './app/screens/QRCode';
-import QRCodeGameScreen from './app/screens/QRCodeGame'; 
+import QRCodeGameScreen from './app/screens/QRCodeGame';
 import QRCodeGameSuccessScreen from './app/screens/QRCodeGameSuccess';
 import QRCodeGameFailureScreen from './app/screens/QRCodeGameFailure';
-import QAGameScreen from './app/screens/QAGame'; 
+import QAGameScreen from './app/screens/QAGame';
 import QAGameSuccess from './app/screens/QAGameSuccess';
 import QAGameFailure from './app/screens/QAGameFailure';
 
@@ -35,9 +35,10 @@ export type RootStackParamList = {
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-const screenOptions = {
+const screenOptions: NativeStackNavigationOptions = {
   title: 'RetroTech',
   headerBackVisible: false,
+  headerTitleAlign: "center", 
 };
 
 export default function App() {
