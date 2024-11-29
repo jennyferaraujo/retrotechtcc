@@ -12,27 +12,25 @@ type QRCodeGameSuccessNavigationProp = NativeStackNavigationProp<RootStackParamL
 
 export default function QRCodeGameSuccess({ route }: { route: QRCodeGameSuccessRouteProp }) {
   const navigation = useNavigation<QRCodeGameSuccessNavigationProp>();
-  const lottieRef = useRef<LottieView>(null); // Referência para o LottieView
+  const lottieRef = useRef<LottieView>(null); 
 
   const handleRetry = () => {
-    navigation.replace("QRCodeGame"); // Substitui a tela para reiniciar o jogo
-    lottieRef.current?.reset(); // Reseta a animação
-    lottieRef.current?.play(); // Reproduz a animação novamente
+    navigation.replace("QRCodeGame"); 
+    lottieRef.current?.reset(); 
+    lottieRef.current?.play(); 
   };
 
   return (
     <LinearGradient colors={["#654ea3", "#eaafc8"]} style={styles.linearGradient}>
-      {/* LottieView para animação */}
       <LottieView
         ref={lottieRef}
-        source={require("../../assets/confetti.json")} // Certifique-se de que o caminho está correto
+        source={require("../../assets/confetti.json")} 
         autoPlay
         loop={false}
         style={styles.lottie}
       />
 
       <View style={styles.container}>
-        {/* Botão de voltar */}
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => navigation.navigate("Games")}
@@ -46,7 +44,6 @@ export default function QRCodeGameSuccess({ route }: { route: QRCodeGameSuccessR
         <Text style={styles.title}>Parabéns!</Text>
         <Text style={styles.message}>Você encontrou a peça certa!</Text>
 
-        {/* Botão para jogar novamente */}
         <TouchableOpacity style={styles.button} onPress={handleRetry}>
           <Text style={styles.buttonText}>Jogar Novamente</Text>
         </TouchableOpacity>

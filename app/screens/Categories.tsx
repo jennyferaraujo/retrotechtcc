@@ -130,8 +130,8 @@ const CategoriesScreen = () => {
                 ))}
             </View>
           )}
+          contentContainerStyle={{ paddingBottom: 40 }}
         />
-
         <Footer />
       </SafeAreaView>
     </LinearGradient>

@@ -49,7 +49,7 @@ const TimelineScreen = () => {
     const snapshot = await firestore.collection(collectionName).orderBy('ano', 'asc').get();
     const collectionData: TimelineEvent[] = [];
 
-    snapshot.docs.forEach((doc: firebase.firestore.QueryDocumentSnapshot) => {
+    snapshot.docs.forEach((doc) => {
       const data = doc.data();
       if (data && data.nome && data.ano) { 
         collectionData.push({
@@ -59,7 +59,6 @@ const TimelineScreen = () => {
           collection: collectionName, 
         });
       } else {
-      
         collectionData.push({
           nome: 'Dados não disponíveis',
           ano: 'Ano desconhecido',
@@ -125,7 +124,7 @@ const TimelineScreen = () => {
   return (
     <LinearGradient colors={['#654ea3', '#eaafc8']} style={styles.linearGradient}>
       <SafeAreaView style={styles.container}>
-        
+        <Text style={styles.headerText}>Linha do Tempo</Text>
         <TextInput
           style={styles.searchBar}
           placeholder="Pesquisar"
@@ -140,7 +139,10 @@ const TimelineScreen = () => {
             data={events}
             keyExtractor={(item) => item.id}
             renderItem={({ item, index }) => (
-              <TouchableOpacity onPress={() => handleItemPress(item.id, item.collection)} style={[styles.eventContainer, { height: ITEM_HEIGHT }]}>
+              <TouchableOpacity
+                onPress={() => handleItemPress(item.id, item.collection)}
+                style={[styles.eventContainer, { height: ITEM_HEIGHT }]}
+              >
                 <View style={styles.textContainerLeft}>
                   {index % 2 === 0 && (
                     <>
@@ -169,6 +171,7 @@ const TimelineScreen = () => {
             getItemLayout={(data, index) => (
               { length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index }
             )}
+            contentContainerStyle={{ paddingBottom: 40 }} 
           />
         </View>
         <Footer />
@@ -187,11 +190,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   headerText: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#ffffff',
     textAlign: 'center',
-    marginVertical: 10,
+    marginBottom: 5,
   },
   searchBar: {
     height: 40,
@@ -201,7 +204,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     color: '#fff',
     marginBottom: 20,
-    marginTop: 20,
+    marginTop: 10,
   },
   loadingContainer: {
     flex: 1,
@@ -258,14 +261,14 @@ const styles = StyleSheet.create({
   horizontalLineLeft: {
     height: 2,
     backgroundColor: '#ffffff',
-    width: '110%',
+    width: '120%',
     marginTop: 5,
     transform: [{ translateX: 30 }],
   },
   horizontalLineRight: {
     height: 2,
     backgroundColor: '#ffffff',
-    width: '110%',
+    width: '120%',
     marginTop: 5,
     transform: [{ translateX: -30 }],
   },
