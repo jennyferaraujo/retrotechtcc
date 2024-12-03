@@ -2,7 +2,7 @@
   "expo": {
     "name": "RetroTech",
     "slug": "fireApp",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/retrotech.png",
     "userInterfaceStyle": "light",
@@ -19,6 +19,7 @@
       }
     },
     "android": {
+      "versionCode": 2,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-retrotech.png",
         "backgroundColor": "#ffffff"
