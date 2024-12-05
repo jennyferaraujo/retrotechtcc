@@ -1,4 +1,4 @@
-package com.jennyferaraujo.fireApp
+package com.retrotech.fireApp
 
 import android.os.Build
 import android.os.Bundle

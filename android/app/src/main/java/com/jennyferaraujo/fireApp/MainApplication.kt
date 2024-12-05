@@ -1,4 +1,4 @@
-package com.jennyferaraujo.fireApp
+package com.retrotech.fireApp
 
 import android.app.Application
 import android.content.res.Configuration
